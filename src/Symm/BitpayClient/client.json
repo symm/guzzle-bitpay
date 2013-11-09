@@ -1,0 +1,138 @@
+{
+    "name" : "Bitpay API",
+    "apiVersion" : "0.3",
+    "description" : "Bitcoin Payment Gateway API",
+    "baseURL" : "https://bitpay.com/api",
+    "operations" : {
+        "createInvoice" : {
+            "httpMethod" : "POST",
+            "uri" : "invoice",
+            "summary" : "Creates an Invoice",
+            "parameters" : {
+                "price" : {
+                    "location" : "postField",
+                    "description" : "This is the amount that is required to be collected from the buyer. Note, if this is specified in a currency other than BTC, the price will be converted into BTC at market exchange rates to determine the amount collected from the buyer",
+                    "required" : true
+                },
+                "currency" : {
+                    "location" : "postField",
+                    "description" : "This is the currency code set for the price setting. The pricing currencies currently supported are USD, EUR, BTC, and all of the codes listed on this page: https://bitpay.com/bitcoin-exchange-rates",
+                    "required" : true
+                },
+                "posData" : {
+                    "location" : "postField",
+                    "description" : "A passthru variable provided by the merchant and designed to be used by the merchant to correlate the invoice with an order or other object in their system. This passthru variable can be a JSON-encoded string,",
+                    "required" : false
+                },
+                "notificationURL" : {
+                    "location" : "postField",
+                    "description" : "A URL to send status update messages to your server (this must be an https URL, unencrypted http URLs or any other type of URL is not supported). Bitpay.com will send a POST request with a JSON encoding of the invoice to this URL when the invoice status changes.",
+                    "required" : false
+                },
+                "transactionSpeed" : {
+                    "location" : "postField",
+                    "description" : "",
+                    "required" : false
+                },
+                "fullNotifications" : {
+                    "location" : "postField",
+                    "description" : "",
+                    "required" : false
+                },
+                "notificationEmail" : {
+                    "location" : "postField",
+                    "description" : "Bitpay.com will send an email to this email address when the invoice status changes",
+                    "required" : false
+                },
+                "redirectURL" : {
+                    "location" : "postField",
+                    "description" : "This is the URL for a return link that is displayed on the receipt, to return the shopper back to your website after a successful purchase. This could be a page specific to the order, or to their account.",
+                    "required" : false
+                },
+                "orderId" : {
+                    "location" : "postField",
+                    "description" : "Used to display your public order number to the buyer on the BitPay invoice. In the merchant Account Summary page, this value is used to identify the ledger entry.",
+                    "required" : false
+                },
+                "itemDesc" : {
+                    "location" : "postField",
+                    "description" : "Used to display an item description to the buyer.",
+                    "required" : false
+                },
+                "itemCode" : {
+                    "location" : "postField",
+                    "description" : "Used to display an item SKU code or part number to the buyer.",
+                    "required" : false
+                },
+                "physical" : {
+                    "location" : "postField",
+                    "description" : "Indicates if a physical item will be shipped or picked up",
+                    "required" : false
+                },
+                "buyerName" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerAddress1" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerAddress2" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerCity" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerState" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerState" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerZip" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerCountry" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerEmail" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                },
+                "buyerPhone" : {
+                    "location" : "postField",
+                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
+                    "required" : false
+                }
+            }
+        },
+        "getInvoice" : {
+            "httpMethod" : "GET",
+            "uri" : "invoice/{id}",
+            "summary" : "Get the current state of an invoice",
+            "parameters" : {
+                "id" : {
+                    "location" : "uri",
+                    "description" : "The invoice ID provided when an invoice was created",
+                    "required" : true
+                }
+            }
+        }
+    }
+}
+
