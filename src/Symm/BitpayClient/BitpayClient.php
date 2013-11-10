@@ -7,6 +7,7 @@ use Guzzle\Service\Client;
 use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Http\Message\RequestInterface;
 
+use Symm\BitpayClient\Exceptions\AuthenticationFailedException;
 
 /**
  * Class BitpayClient
@@ -69,9 +70,66 @@ class BitpayClient extends Client
      */
     public function createRequest($method = RequestInterface::GET, $uri = null, $headers = null, $body = null, array $options = array())
     {
-        $request = parent::createRequest($method, $uri, $headers, $body);
+        $request = parent::createRequest($method, $uri, $headers, $body, $options);
 
         return $request;
+    }
+
+    /**
+     * Call from your notification handler to convert $_POST data to an array containing invoice data
+     *
+     * @param string $response The raw POST json string obtained using file_get_contents("php://input");
+     *
+     * @return Array The decoded response
+     * @throws \Exception
+     * @throws Exceptions\AuthenticationFailedException
+     */
+    public function verifyNotification($response)
+    {
+        $jsonArray = json_decode($response, true);
+
+        if (null === $jsonArray) {
+            throw new \Exception('Error decoding JSON: ' .
+                json_last_error() . ':' . json_last_error_msg());
+        }
+
+        if (!array_key_exists('posData', $jsonArray)) {
+            throw new \Exception('Could not find the posData array key in the response');
+        }
+
+        if (!array_key_exists('hash', $jsonArray)) {
+            throw new \Exception('Could not find the hash array key in the response');
+        }
+
+        $posData = json_decode($jsonArray['posData'], true);
+        if (null === $jsonArray) {
+            throw new \Exception('Error decoding posData: ' .
+                json_last_error() . ':' . json_last_error_msg());
+        }
+
+        $expectedHash = $this->generateHash(serialize($posData['posData']));
+        if ($posData['hash'] != $expectedHash) {
+            $exception = new AuthenticationFailedException('Authentication failed - bad hash');
+
+            throw $exception;
+        }
+
+        $jsonArray['posData'] = $posData['posData'];
+
+        return $jsonArray;
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return string
+     */
+    private function generateHash($data)
+    {
+        $key = $this->getConfig('apiKey');
+        $hmac = base64_encode(hash_hmac('sha256', $data, $key, true));
+
+        return strtr($hmac, array('+' => '-', '/' => '_', '=' => ''));
     }
 
 }

@@ -12,6 +12,9 @@
         "guzzle/guzzle" : "3.7.*",
         "psr/log" : "1.*"
     },
+    "require-dev": {
+        "monolog/monolog" : "*"
+    },
     "autoload": {
         "psr-0": { "Symm\\": "src/" }
     }
