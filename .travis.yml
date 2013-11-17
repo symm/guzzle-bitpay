@@ -1,10 +1,14 @@
 language: php
+
 php:
-  - 5.3
+  - 5.5
   - 5.4
+
 before_script:
-  - wget --quiet http://getcomposer.org/composer.phar
-  - php composer.phar install --install-suggests
-  - cp phpunit.xml.dist phpunit.xml
-  - ~/.nvm/nvm.sh run default vendor/guzzle/guzzle/tests/Guzzle/Tests/Http/server.js &
-script: phpunit
+  - composer install --dev
+
+script: phpunit --coverage-text
+
+notifications:
+  email:
+    - gazjones@gmail.com
