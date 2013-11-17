@@ -8,6 +8,7 @@ use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Http\Message\RequestInterface;
 
 use Symm\BitpayClient\Exceptions\AuthenticationFailedException;
+use Symm\BitpayClient\Exceptions\InvalidJsonResponseException;
 
 /**
  * Class BitpayClient
@@ -58,30 +59,13 @@ class BitpayClient extends Client
         return $client;
     }
 
-
-    /**
-     * @param string $method
-     * @param null   $uri
-     * @param null   $headers
-     * @param null   $body
-     * @param array  $options
-     *
-     * @return RequestInterface
-     */
-    public function createRequest($method = RequestInterface::GET, $uri = null, $headers = null, $body = null, array $options = array())
-    {
-        $request = parent::createRequest($method, $uri, $headers, $body, $options);
-
-        return $request;
-    }
-
     /**
      * Call from your notification handler to convert $_POST data to an array containing invoice data
      *
      * @param string $response The raw POST json string obtained using file_get_contents("php://input");
      *
      * @return Array The decoded response
-     * @throws \Exception
+     * @throws Exceptions\InvalidJsonResponseException
      * @throws Exceptions\AuthenticationFailedException
      */
     public function verifyNotification($response)
@@ -89,22 +73,20 @@ class BitpayClient extends Client
         $jsonArray = json_decode($response, true);
 
         if (null === $jsonArray) {
-            throw new \Exception('Error decoding JSON: ' .
-                json_last_error() . ':' . json_last_error_msg());
+            throw new InvalidJsonResponseException('Error decoding JSON: ' . json_last_error());
         }
 
         if (!array_key_exists('posData', $jsonArray)) {
-            throw new \Exception('Could not find the posData array key in the response');
+            throw new InvalidJsonResponseException('Could not find the posData array key in the response');
         }
 
         if (!array_key_exists('hash', $jsonArray)) {
-            throw new \Exception('Could not find the hash array key in the response');
+            throw new InvalidJsonResponseException('Could not find the hash array key in the response');
         }
 
         $posData = json_decode($jsonArray['posData'], true);
         if (null === $jsonArray) {
-            throw new \Exception('Error decoding posData: ' .
-                json_last_error() . ':' . json_last_error_msg());
+            throw new InvalidJsonResponseException('Error decoding posData: ' . json_last_error());
         }
 
         $expectedHash = $this->generateHash(serialize($posData['posData']));
