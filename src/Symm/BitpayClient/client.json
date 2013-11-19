@@ -132,6 +132,11 @@
                     "required" : true
                 }
             }
+        },
+        "getRates" : {
+            "httpMethod" : "GET",
+            "uri" : "rates",
+            "summary" : "Get the Bitcoin Best Bid (BBB) exchange rates"
         }
     }
 }
