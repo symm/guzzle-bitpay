@@ -17,11 +17,12 @@ Usage
     );
     $client = BitpayClient::factory($config);
 
-    $response = $client->createInvoice(array('price' => 3, 'currency' => 'BTC'));
-    $response = $client->getInvoice(array('id' => 3));
+    $invoice = $client->createInvoice(array('price' => 3, 'currency' => 'BTC'));
+    $response = $client->getInvoice(array('id' => $invoice['id']));
 
 Available Actions
 -----------------
 
     $api->createInvoice()
     $api->getInvoice()
+    $api->getRates()
