@@ -2,6 +2,7 @@
     "name": "symm/guzzle-bitpay",
     "description": "Guzzle client for Bitpay API",
     "minimum-stability": "stable",
+    "license": "MIT",
     "authors": [
         {
             "name": "Gareth Jones",
