@@ -10,7 +10,7 @@
         }
     ],
     "require" : {
-        "guzzle/guzzle" : "3.7.*",
+        "guzzle/guzzle" : "3.8.*",
         "psr/log" : "1.*"
     },
     "require-dev": {
