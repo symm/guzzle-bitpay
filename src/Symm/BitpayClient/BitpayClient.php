@@ -9,11 +9,14 @@ use Guzzle\Http\Message\RequestInterface;
 
 use Symm\BitpayClient\Exceptions\AuthenticationFailedException;
 use Symm\BitpayClient\Exceptions\InvalidJsonResponseException;
+use Symm\BitpayClient\Model\Invoice;
 
 /**
- * Class BitpayClient
+ * BitpayClient
  *
- * @package Symm\BitpayClient
+ * @method Invoice createInvoice() createInvoice($parameters) Create an Invoice
+ * @method Invoice getInvoice() getInvoice($parameters) Get an Invoice
+ * @method getRates() getRates()
  */
 class BitpayClient extends Client
 {
