@@ -114,7 +114,8 @@
                     "description" : "used for display purposes only and will be shown on the invoice if provided.",
                     "required" : false
                 }
-            }
+            },
+            "responseClass" : "Symm\\BitPayClient\\Model\\Invoice"
         },
         "getInvoice" : {
             "httpMethod" : "GET",
@@ -126,7 +127,8 @@
                     "description" : "The invoice ID provided when an invoice was created",
                     "required" : true
                 }
-            }
+            },
+            "responseClass" : "Symm\\BitPayClient\\Model\\Invoice"
         },
         "getRates" : {
             "httpMethod" : "GET",
