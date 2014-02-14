@@ -94,11 +94,6 @@
                     "description" : "used for display purposes only and will be shown on the invoice if provided.",
                     "required" : false
                 },
-                "buyerState" : {
-                    "location" : "postField",
-                    "description" : "used for display purposes only and will be shown on the invoice if provided.",
-                    "required" : false
-                },
                 "buyerZip" : {
                     "location" : "postField",
                     "description" : "used for display purposes only and will be shown on the invoice if provided.",
