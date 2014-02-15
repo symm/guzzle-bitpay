@@ -25,9 +25,9 @@ class BitpayClient extends Client
      * Create a new BitpayClient
      *
      * @param string $baseUrl
-     * @param null   $config
+     * @param array  $config
      */
-    public function __construct($baseUrl = '', $config = null)
+    public function __construct($baseUrl = '', $config = array())
     {
         parent::__construct($baseUrl, $config);
 
@@ -58,7 +58,7 @@ class BitpayClient extends Client
         $client->setDefaultOption(
             'auth',
             array(
-                $client->getconfig('apiKey'),
+                $config['apiKey'],
                 '',
                 'Basic'
             )

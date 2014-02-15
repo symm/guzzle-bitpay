@@ -46,11 +46,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         return $command;
     }
 
-    protected function millisecondsToUnixTime($milliseconds)
-    {
-        return round($milliseconds / 1000);
-    }
-
     public function testInvoiceCanBeInstantiated()
     {
         $invoice = Invoice::fromCommand($this->getMockOperationCommand());
@@ -80,16 +75,16 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\DateTime', $invoice->getInvoiceTime());
 
         $this->assertEquals(
-            $this->millisecondsToUnixTime($this->json['expirationTime']),
-            $invoice->getExpirationTime()->format('U')
+            Invoice::parseDate($this->json['expirationTime']),
+            $invoice->getExpirationTime()
         );
         $this->assertEquals(
-            $this->millisecondsToUnixTime($this->json['currentTime']),
-            $invoice->getCurrentTime()->format('U')
+            Invoice::parseDate($this->json['currentTime']),
+            $invoice->getCurrentTime()
         );
         $this->assertEquals(
-            $this->millisecondsToUnixTime($this->json['invoiceTime']),
-            $invoice->getInvoiceTime()->format('U')
+            Invoice::parseDate($this->json['invoiceTime']),
+            $invoice->getInvoiceTime()
         );
     }
 

@@ -140,10 +140,15 @@ class Invoice implements ResponseClassInterface
             $json['btcPrice'],
             $json['price'],
             $json['currency'],
-            \DateTime::createFromFormat('U', round($json['invoiceTime'] / 1000)),
-            \DateTime::createFromFormat('U', round($json['expirationTime'] / 1000)),
-            \DateTime::createFromFormat('U', round($json['currentTime'] / 1000))
+            self::parseDate($json['invoiceTime']),
+            self::parseDate($json['expirationTime']),
+            self::parseDate($json['currentTime'])
         );
+    }
+
+    public static function parseDate($milliseconds)
+    {
+        return new \DateTime('@' . round($milliseconds / 1000));
     }
 
     /**
