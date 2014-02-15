@@ -115,7 +115,7 @@
                     "required" : false
                 }
             },
-            "responseClass" : "Symm\\BitPayClient\\Model\\Invoice"
+            "responseClass" : "\\Symm\\BitpayClient\\Model\\Invoice"
         },
         "getInvoice" : {
             "httpMethod" : "GET",
@@ -128,13 +128,13 @@
                     "required" : true
                 }
             },
-            "responseClass" : "Symm\\BitPayClient\\Model\\Invoice"
+            "responseClass" : "\\Symm\\BitpayClient\\Model\\Invoice"
         },
         "getRates" : {
             "httpMethod" : "GET",
             "uri" : "rates",
             "summary" : "Get the Bitcoin Best Bid (BBB) exchange rates",
-            "responseClass" : "Symm\\BitPayClient\\Model\\CurrencyCollection"
+            "responseClass" : "\\Symm\\BitpayClient\\Model\\CurrencyCollection"
         }
     }
 }
