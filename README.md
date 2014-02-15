@@ -31,10 +31,10 @@ $client = BitpayClient::factory(
 );
 ```
 
-### Create a new Invoice
+### Create a new invoice
 
 ``` php
-$newInvoice = $client->createInvoice(
+$invoice = $client->createInvoice(
     array(
         'price'    => 0.0001,
         'currency' => 'BTC',
@@ -43,18 +43,18 @@ $newInvoice = $client->createInvoice(
 echo $invoice->getUrl() . PHP_EOL;
 ```
 
-### Check Invoice status
+### Receive an existing invoice
 
 ``` php
-$existingInvoice = $client->getInvoice(
+$invoice = $client->getInvoice(
     array(
-        'id' => $newInvoice->getId()
+        'id' => 'XXXXXXXXXXXXXXXXXXXXXX'
     )
 );
 echo $invoice->getStatus() . PHP_EOL;
 ```
 
-### Get Exchange Rates
+### Get exchange rates
 
 ``` php
 $currencyCollection = $client->getRates();
