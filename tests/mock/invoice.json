@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Server: cloudflare-nginx
+Date: Sat, 15 Feb 2014 09:41:16 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Powered-By: Express
+
+{
+    "id":"XXXXXXXXXXXXXXXXXXXXXX",
+    "url":"https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX",
+    "posData":"Test Pos data",
+    "status":"new",
+    "btcPrice":"0.0001",
+    "price":0.0001,
+    "currency":"BTC",
+    "invoiceTime":1392457276030,
+    "expirationTime":1392458176030,
+    "currentTime":1392457276187
+}

@@ -11,7 +11,7 @@ if (!file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'composer.lock')) {
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 // Register an autoloader for the client being tested
-spl_autoload_register(function($class) {
+spl_autoload_register(function ($class) {
     if (0 === strpos($class, 'Symm\BitpayClient')) {
         $class = str_replace('Symm\BitpayClient', '', $class);
         if ('\\' != DIRECTORY_SEPARATOR) {
