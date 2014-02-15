@@ -133,7 +133,8 @@
         "getRates" : {
             "httpMethod" : "GET",
             "uri" : "rates",
-            "summary" : "Get the Bitcoin Best Bid (BBB) exchange rates"
+            "summary" : "Get the Bitcoin Best Bid (BBB) exchange rates",
+            "responseClass" : "Symm\\BitPayClient\\Model\\CurrencyCollection"
         }
     }
 }

@@ -22,6 +22,12 @@ Usage
     $response = $client->getInvoice(array('id' => $invoice->getId()));
     // Will return a Symm\BitpayClient\Model\Invoice
 
+    $currencyCollection = $client->getRates();
+    // Returns a CurrencyCollection
+    foreach ($currencyCollection as $currency) {
+        echo $currency->getName() . ': ' . $currency->getRate() . PHP_EOL;
+    }
+
 Available Actions
 -----------------
     $api->createInvoice()

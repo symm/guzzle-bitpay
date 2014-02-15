@@ -7,16 +7,17 @@ use Guzzle\Service\Client;
 use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Http\Message\RequestInterface;
 
+use Symm\BitpayClient\Model\Invoice;
+use Symm\BitpayClient\Model\CurrencyCollection;
 use Symm\BitpayClient\Exceptions\AuthenticationFailedException;
 use Symm\BitpayClient\Exceptions\InvalidJsonResponseException;
-use Symm\BitpayClient\Model\Invoice;
 
 /**
  * BitpayClient
  *
  * @method Invoice createInvoice() createInvoice($parameters) Create an Invoice
  * @method Invoice getInvoice() getInvoice($parameters) Get an Invoice
- * @method getRates() getRates()
+ * @method CurrencyCollection getRates() getRates()
  */
 class BitpayClient extends Client
 {
