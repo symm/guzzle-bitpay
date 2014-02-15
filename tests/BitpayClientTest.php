@@ -51,6 +51,22 @@ class BitpayClientTest extends GuzzleTestCase
         $this->assertEquals("Basic", $requestOptions['auth'][2]);
     }
 
+    public function testClientSetsTheUserAgent()
+    {
+        $client = $this->getClient();
+        $userAgent = $client->getCommand(
+            'getInvoice',
+            array(
+                'id' => '1234'
+            )
+        )
+            ->prepare()
+            ->getHeader('User-Agent')
+            ->__toString();
+
+        $this->assertEquals('Guzzle BitpayClient - https://github.com/symm/guzzle-bitpay', $userAgent);
+    }
+
     public function testCreateInvoiceReturnsInvoiceModel()
     {
         $client = $this->getClient();

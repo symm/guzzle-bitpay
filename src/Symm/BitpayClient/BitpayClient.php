@@ -5,7 +5,6 @@ namespace Symm\BitpayClient;
 use Guzzle\Common\Collection;
 use Guzzle\Service\Client;
 use Guzzle\Service\Description\ServiceDescription;
-use Guzzle\Http\Message\RequestInterface;
 
 use Symm\BitpayClient\Model\Invoice;
 use Symm\BitpayClient\Model\CurrencyCollection;
@@ -22,8 +21,6 @@ use Symm\BitpayClient\Exceptions\InvalidJsonResponseException;
 class BitpayClient extends Client
 {
 
-    const CLIENT_VERSION = 'beta';
-
     /**
      * Create a new BitpayClient
      *
@@ -34,7 +31,7 @@ class BitpayClient extends Client
     {
         parent::__construct($baseUrl, $config);
 
-        //$this->setUserAgent('BitpayClient: ' . self::CLIENT_VERSION . '- https://github.com/symm/guzzle-bitpay');
+        $this->setUserAgent('Guzzle BitpayClient - https://github.com/symm/guzzle-bitpay');
     }
 
     /**
@@ -58,7 +55,14 @@ class BitpayClient extends Client
 
         $client = new self($config->get('base_url'), $config);
         $client->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.json'));
-        $client->setDefaultOption('auth', array($client->getconfig('apiKey'), '', 'Basic'));
+        $client->setDefaultOption(
+            'auth',
+            array(
+                $client->getconfig('apiKey'),
+                '',
+                'Basic'
+            )
+        );
 
         return $client;
     }
@@ -110,12 +114,11 @@ class BitpayClient extends Client
      *
      * @return string
      */
-    private function generateHash($data)
+    protected function generateHash($data)
     {
         $key = $this->getConfig('apiKey');
         $hmac = base64_encode(hash_hmac('sha256', $data, $key, true));
 
         return strtr($hmac, array('+' => '-', '/' => '_', '=' => ''));
     }
-
 }
