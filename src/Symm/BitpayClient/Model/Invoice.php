@@ -146,6 +146,13 @@ class Invoice implements ResponseClassInterface
         );
     }
 
+    /**
+     * Convert milliseconds into a DateTime object
+     *
+     * @param integer $milliseconds
+     *
+     * @return \DateTime
+     */
     public static function parseDate($milliseconds)
     {
         return new \DateTime('@' . round($milliseconds / 1000));

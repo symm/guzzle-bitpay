@@ -25,9 +25,9 @@ class Currency
     /**
      * Constructor
      *
-     * @param $code
-     * @param $name
-     * @param $rate
+     * @param string $code
+     * @param string $name
+     * @param string $rate
      */
     public function __construct($code, $name, $rate)
     {

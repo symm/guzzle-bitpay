@@ -25,7 +25,7 @@ class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Itera
     /**
      * Constructor
      *
-     * @param $currencies
+     * @param array $currencies
      */
     public function __construct($currencies)
     {
