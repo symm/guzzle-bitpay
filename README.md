@@ -11,24 +11,44 @@ Access the [BitPay API v0.3](https://bitpay.com/bitcoin-payment-gateway-api) in 
 
 Usage
 -----
-    use Symm\BitpayClient\BitpayClient;
 
-    $config = array(
-        'apiKey' => 'test'
-    );
-    $client = BitpayClient::factory($config);
+```php
+<?php
 
-    $invoice  = $client->createInvoice(array('price' => 3, 'currency' => 'BTC'));
-    // Will return a Symm\BitpayClient\Model\Invoice
+require_once('vendor/autoload.php');
 
-    $response = $client->getInvoice(array('id' => $invoice->getId()));
-    // Will return a Symm\BitpayClient\Model\Invoice
+use Symm\BitpayClient\BitpayClient;
 
-    $currencyCollection = $client->getRates();
-    // Returns a CurrencyCollection
-    foreach ($currencyCollection as $currency) {
-        echo $currency->getName() . ': ' . $currency->getRate() . PHP_EOL;
-    }
+$client = BitpayClient::factory(
+    array(
+        'apiKey' => 'YOUR_API_KEY_HERE',
+    )
+);
+
+// Create a new Invoice
+$newInvoice = $client->createInvoice(
+    array(
+        'price'    => 0.0001,
+        'currency' => 'BTC',
+    )
+);
+echo 'Invoice ('. $newInvoice->getId() . ') can be paid at: ' . $newInvoice->getUrl() . PHP_EOL;
+
+// Check the status of an existing invoice
+$existingInvoice = $client->getInvoice(
+    array(
+        'id' => $newInvoice->getId()
+    )
+);
+echo 'Invoice ' . $existingInvoice->getId() . ' has status: ' . $existingInvoice->getStatus() . PHP_EOL;
+
+// Get the current exchange Rates
+$currencyCollection = $client->getRates();
+/** @var \Symm\BitpayClient\Model\Currency $currency */
+foreach ($currencyCollection as $currency) {
+    echo $currency->getCode() . ': ' . $currency->getRate() . '(' .$currency->getName() .')'. PHP_EOL;
+}
+```
 
 Available Actions
 -----------------
