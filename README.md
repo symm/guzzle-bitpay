@@ -13,7 +13,7 @@ Require the library in your [composer.json](https://getcomposer.org/) file:
 ``` json
 {
     "require": {
-        "symm/guzzle-bitpay": "dev-master"
+        "symm/guzzle-bitpay": "1.0.x-dev"
     }
 }
 ```
