@@ -10,7 +10,7 @@
         }
     ],
     "require" : {
-        "guzzle/guzzle" : "3.8.*",
+        "guzzle/guzzle" : ">=3.7.1,<3.9.0",
         "psr/log" : "1.*"
     },
     "require-dev": {
@@ -19,5 +19,10 @@
     },
     "autoload": {
         "psr-0": { "Symm\\": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
