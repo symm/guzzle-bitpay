@@ -14,7 +14,8 @@
         "psr/log" : "1.*"
     },
     "require-dev": {
-        "monolog/monolog" : "*"
+        "monolog/monolog" : "*",
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
         "psr-0": { "Symm\\": "src/" }
