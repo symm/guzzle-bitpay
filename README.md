@@ -1,57 +1,77 @@
-BitPay Client for PHP
-=====================
+# BitPay Client for PHP
 
 [![Build Status](https://travis-ci.org/symm/guzzle-bitpay.png?branch=master)](https://travis-ci.org/symm/guzzle-bitpay)
 [![Code Coverage](https://scrutinizer-ci.com/g/symm/guzzle-bitpay/badges/coverage.png?s=d9c3fdee868426cca2068918000dcc535f6fa62b)](https://scrutinizer-ci.com/g/symm/guzzle-bitpay/)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/symm/guzzle-bitpay/badges/quality-score.png?s=5966642768365302617000fa075303b29858eb82)](https://scrutinizer-ci.com/g/symm/guzzle-bitpay/)
 
-Access the [BitPay API v0.3](https://bitpay.com/bitcoin-payment-gateway-api) in PHP using [Guzzle](http://guzzlephp.org).
+Add BitPay payment processing support to your PHP application using the [BitPay API](https://bitpay.com/bitcoin-payment-gateway-api) and [Guzzle](https://guzzle.readthedocs.org/)
 
-[Official API Documentation](https://bitpay.com/downloads/bitpayApi.pdf)
+## Installation
 
-Usage
------
+Require the library in your [composer.json](https://getcomposer.org/) file:
 
-```php
-<?php
+``` json
+{
+    "require": {
+        "symm/guzzle-bitpay": "dev-master"
+    }
+}
+```
 
-require_once('vendor/autoload.php');
+## Usage
 
+### Create and configure a client
+
+``` php
 use Symm\BitpayClient\BitpayClient;
-
 $client = BitpayClient::factory(
     array(
         'apiKey' => 'YOUR_API_KEY_HERE',
     )
 );
+```
 
-// Create a new Invoice
+### Create a new Invoice
+
+``` php
 $newInvoice = $client->createInvoice(
     array(
         'price'    => 0.0001,
         'currency' => 'BTC',
     )
 );
-echo 'Invoice ('. $newInvoice->getId() . ') can be paid at: ' . $newInvoice->getUrl() . PHP_EOL;
+echo $invoice->getUrl() . PHP_EOL;
+```
 
-// Check the status of an existing invoice
+### Check Invoice status
+
+``` php
 $existingInvoice = $client->getInvoice(
     array(
         'id' => $newInvoice->getId()
     )
 );
-echo 'Invoice ' . $existingInvoice->getId() . ' has status: ' . $existingInvoice->getStatus() . PHP_EOL;
+echo $invoice->getStatus() . PHP_EOL;
+```
 
-// Get the current exchange Rates
+### Get Exchange Rates
+
+``` php
 $currencyCollection = $client->getRates();
-/** @var \Symm\BitpayClient\Model\Currency $currency */
 foreach ($currencyCollection as $currency) {
-    echo $currency->getCode() . ': ' . $currency->getRate() . '(' .$currency->getName() .')'. PHP_EOL;
+    /** @var \Symm\BitpayClient\Model\Currency $currency */
+    echo $currency->getCode() . ': ' . $currency->getRate();
 }
 ```
 
-Available Actions
------------------
-    $api->createInvoice()
-    $api->getInvoice()
-    $api->getRates()
+## Resources
+
+[Guzzle Documentation](https://guzzle.readthedocs.org/en/latest/docs.html)
+
+[Official API Documentation](https://bitpay.com/downloads/bitpayApi.pdf)
+
+## Copyright and license
+
+Code copyright Gareth Jones and released under [the MIT license](LICENSE).
+
+If you enjoy this library, please consider making a donation: [1CMaGyGXWsFbmQ8HmuzJ6qCe1NQ9ypcS2E](bitcoin:1CMaGyGXWsFbmQ8HmuzJ6qCe1NQ9ypcS2E?message=guzzle-bitpay-donation)
