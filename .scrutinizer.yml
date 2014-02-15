@@ -5,4 +5,4 @@ tools:
     external_code_coverage: true
     php_code_sniffer:
         config:
-            ruleset: phpcs.xml
+            standard: PSR2
