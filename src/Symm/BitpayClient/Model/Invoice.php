@@ -146,12 +146,6 @@ class Invoice implements ResponseClassInterface
         );
     }
 
-    public static function convertMillisecondsToDateTime($milliseconds)
-    {
-        $seconds = round($milliseconds / 1000);
-        return \DateTime::createFromFormat('U', $seconds);
-    }
-
     /**
      * Get the btcPrice of the Invoice
      *
