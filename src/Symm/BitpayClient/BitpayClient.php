@@ -24,8 +24,8 @@ class BitpayClient extends Client
     /**
      * Create a new BitpayClient
      *
-     * @param string $baseUrl
-     * @param array  $config
+     * @param string            $baseUrl
+     * @param array|Collection  $config
      */
     public function __construct($baseUrl = '', $config = array())
     {
