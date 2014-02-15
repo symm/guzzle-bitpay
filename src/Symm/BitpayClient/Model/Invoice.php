@@ -135,7 +135,7 @@ class Invoice implements ResponseClassInterface
         return new self(
             $json['id'],
             $json['url'],
-            $json['posData'],
+            array_key_exists('posData', $json) ? $json['posData'] : '', // posData key is not always returned by api
             $json['status'],
             $json['btcPrice'],
             $json['price'],

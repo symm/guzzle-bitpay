@@ -88,6 +88,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testInvoicePropertiesWithNoPosData()
+    {
+        unset($this->json['posData']);
+        $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+        $this->assertEquals(null, $invoice->getPosData());
+    }
+
     public function testInvoiceHasAnArrayOfInvoiceStatuses()
     {
         $this->assertInternalType(\PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, Invoice::$allowedStatuses);
