@@ -5,10 +5,12 @@ namespace Symm\BitpayClient\Model;
 use Guzzle\Service\Command\OperationCommand;
 use Guzzle\Service\Command\ResponseClassInterface;
 
+use Symm\BitpayClient\Exceptions\ImmutableObjectException;
+
 /**
  * CurrencyCollection
  */
-class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Iterator
+class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Iterator, \Countable
 {
     /**
      * @var array
@@ -27,7 +29,7 @@ class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Itera
      */
     public function __construct($currencies)
     {
-        $this->position = 0;
+        $this->position   = 0;
         $this->currencies = $currencies;
     }
 
@@ -76,11 +78,7 @@ class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Itera
      */
     public function offsetSet($offset, $value)
     {
-        if ($offset) {
-            $this->currencies[$offset] = $value;
-        } else {
-            $this->currencies[] = $value;
-        }
+        throw new ImmutableObjectException(get_class($this) .' is an immutable object');
     }
 
     /**
@@ -88,9 +86,7 @@ class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Itera
      */
     public function offsetUnset($offset)
     {
-        unset($this->currencies[$offset]);
-
-        return true;
+        throw new ImmutableObjectException(get_class($this) .' is an immutable object');
     }
 
     /**
@@ -131,5 +127,13 @@ class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Itera
     public function rewind()
     {
         $this->position = 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->currencies);
     }
 }
