@@ -6,10 +6,12 @@ use Guzzle\Common\Collection;
 use Guzzle\Service\Client;
 use Guzzle\Service\Description\ServiceDescription;
 
+use Symm\BitpayClient\Exception\CallbackBadHashException;
+use Symm\BitpayClient\Exception\CallbackPosDataMissingException;
+use Symm\BitpayClient\Exception\CallbackJsonMissingException;
+use Symm\BitpayClient\Exception\CallbackInvalidJsonException;
 use Symm\BitpayClient\Model\Invoice;
 use Symm\BitpayClient\Model\CurrencyCollection;
-use Symm\BitpayClient\Exceptions\AuthenticationFailedException;
-use Symm\BitpayClient\Exceptions\InvalidJsonResponseException;
 
 /**
  * BitpayClient
@@ -20,7 +22,6 @@ use Symm\BitpayClient\Exceptions\InvalidJsonResponseException;
  */
 class BitpayClient extends Client
 {
-
     /**
      * Create a new BitpayClient
      *
@@ -70,46 +71,44 @@ class BitpayClient extends Client
     /**
      * Call from your notification handler to convert $_POST data to an array containing invoice data
      *
-     * @param string $response The raw POST json string obtained using file_get_contents("php://input");
+     * @param string $jsonString The raw POST json string obtained using file_get_contents("php://input");
      *
-     * @return Array The decoded response
-     * @throws Exceptions\InvalidJsonResponseException
-     * @throws Exceptions\AuthenticationFailedException
+     * @return Invoice
+     *
+     * @throws Exception\CallbackPosDataMissingException
+     * @throws Exception\CallbackJsonMissingException
+     * @throws Exception\CallbackInvalidJsonException
+     * @throws Exception\CallbackBadHashException
      */
-    public function verifyNotification($response)
+    public function verifyNotification($jsonString)
     {
-        $jsonArray = json_decode($response, true);
-
-        if (null === $jsonArray) {
-            throw new InvalidJsonResponseException('Error decoding JSON: ' . json_last_error());
+        if (!$jsonString) {
+            throw new CallbackJsonMissingException();
         }
 
-        if (!array_key_exists('posData', $jsonArray)) {
-            throw new InvalidJsonResponseException('Could not find the posData array key in the response');
+        $json = json_decode($jsonString, true);
+
+        if (!is_array($json)) {
+            throw new CallbackInvalidJsonException();
         }
 
-        if (!array_key_exists('hash', $jsonArray)) {
-            throw new InvalidJsonResponseException('Could not find the hash array key in the response');
+        if (!array_key_exists('posData', $json)) {
+            throw new CallbackPosDataMissingException();
         }
 
-        $posData = json_decode($jsonArray['posData'], true);
-        if (null === $jsonArray) {
-            throw new InvalidJsonResponseException('Error decoding posData: ' . json_last_error());
+        $posData = json_decode($json['posData'], true);
+        if ($posData['hash'] != $this->generateHash(serialize($posData['posData']))) {
+            throw new CallbackBadHashException();
         }
 
-        $expectedHash = $this->generateHash(serialize($posData['posData']));
-        if ($posData['hash'] != $expectedHash) {
-            $exception = new AuthenticationFailedException('Authentication failed - bad hash');
+        $json['posData'] = $posData['posData'];
 
-            throw $exception;
-        }
-
-        $jsonArray['posData'] = $posData['posData'];
-
-        return $jsonArray;
+        return Invoice::fromArray($json);
     }
 
     /**
+     * Generate Callback hash
+     *
      * @param string $data
      *
      * @return string

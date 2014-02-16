@@ -131,7 +131,11 @@ class Invoice implements ResponseClassInterface
     {
         $response = $command->getResponse();
         $json     = $response->json();
+        return self::fromArray($json);
+    }
 
+    public static function fromArray($json)
+    {
         return new self(
             $json['id'],
             $json['url'],

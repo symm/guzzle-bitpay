@@ -43,7 +43,7 @@ class BitpayClientTest extends GuzzleTestCase
 
     public function testClientConfiguresBasicAuthWithTheApiKey()
     {
-        $client = $this->getClient();
+        $client         = $this->getClient();
         $requestOptions = $client->getConfig('request.options');
 
         $this->assertEquals($this->config['apiKey'], $requestOptions['auth'][0]);
@@ -53,7 +53,7 @@ class BitpayClientTest extends GuzzleTestCase
 
     public function testClientSetsTheUserAgent()
     {
-        $client = $this->getClient();
+        $client    = $this->getClient();
         $userAgent = $client->getCommand(
             'getInvoice',
             array(
@@ -103,77 +103,75 @@ class BitpayClientTest extends GuzzleTestCase
     }
 
     /**
-     * @expectedException \Symm\BitpayClient\Exceptions\InvalidJsonResponseException
+     * @expectedException \Symm\BitpayClient\Exception\CallbackJsonMissingException
      */
-    public function testVerifyNotificationBadJson()
+    public function testCallbackMissingJson()
     {
         $client = $this->getClient();
 
-        $client->verifyNotification('bad json');
+        $client->verifyNotification('');
     }
 
     /**
-     * @expectedException \Symm\BitpayClient\Exceptions\InvalidJsonResponseException
+     * @expectedException \Symm\BitpayClient\Exception\CallbackInvalidJsonException
      */
-    public function testVerifyNotificationMissingPosdata()
+    public function testCallbackInvalidJson()
+    {
+        $client = $this->getClient();
+
+        $client->verifyNotification("23kwreGSFDG£%");
+    }
+
+    /**
+     * @expectedException \Symm\BitpayClient\Exception\CallbackPosDataMissingException
+     */
+    public function testCallbackPosDataMissing()
+    {
+        $client   = $this->getClient();
+        $response = json_encode(
+            array(
+                'id' => 'test'
+            )
+        );
+
+        $response = $client->verifyNotification($response);
+        var_dump($response);
+    }
+
+    /**
+     * @expectedException \Symm\BitpayClient\Exception\CallbackBadHashException
+     */
+    public function testCallbackBadHash()
     {
         $client = $this->getClient();
 
         $response = json_encode(
             array(
-                'test' => true
+                'posData' => '{"posData":[],"hash":"INVALID_HASH"}',
             )
         );
 
         $client->verifyNotification($response);
     }
 
-    /**
-     * @expectedException \Symm\BitpayClient\Exceptions\InvalidJsonResponseException
-     */
-    public function testVerifyNotificationMissingHashData()
-    {
-        $client = $this->getClient();
-        $response = json_encode(
-            array(
-                'posData' => ''
-            )
-        );
-
-        $client->verifyNotification($response);
-
-    }
-
-    /**
-     * @expectedException \Symm\BitpayClient\Exceptions\InvalidJsonResponseException
-     */
-    public function testVerifyNotificationEmptyPosData()
-    {
-
-        $client = $this->getClient();
-        $response = json_encode(
-            array(
-            'posData' => '',
-            )
-        );
-
-        $client->verifyNotification($response);
-    }
-
-    /**
-     * @expectedException \Symm\BitpayClient\Exceptions\AuthenticationFailedException
-     */
-    public function testVerifyNoticationBadHash()
+    public function testVerifyValidNotification()
     {
         $client = $this->getClient();
 
-        $response = json_encode(
-            array(
-            'posData' => 'order 1234',
-            'hash'    => 'badhash',
-            )
+        $invoice = array(
+            'id'             => 'XXXXXX',
+            'url'            => 'https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX',
+            'posData'        => '{"posData":[],"hash":"QtIBmfjB2OvGrjfqt-9EE4JeWBzKEB_q8UHN6-If_3U"}',
+            'status'         => 'new',
+            'btcPrice'       => '0.0001',
+            'price'          => '0.0001',
+            'currency'       => 'BTC',
+            'invoiceTime'    => '1392457276030',
+            'expirationTime' => '1392458176030',
+            'currentTime'    => '1392457276187'
         );
 
-        $client->verifyNotification($response);
+        $invoice = $client->verifyNotification(json_encode($invoice));
+        $this->assertInstanceOf('\Symm\BitpayClient\Model\Invoice', $invoice);
     }
 }

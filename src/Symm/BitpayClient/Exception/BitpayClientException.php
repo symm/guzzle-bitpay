@@ -1,6 +1,6 @@
 <?php
 
-namespace Symm\BitpayClient\Exceptions;
+namespace Symm\BitpayClient\Exception;
 
 /**
  * BitpayClientException

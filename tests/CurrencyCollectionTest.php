@@ -100,7 +100,7 @@ class CurrencyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symm\BitpayClient\Exceptions\ImmutableObjectException
+     * @expectedException \Symm\BitpayClient\Exception\ImmutableObjectException
      */
     public function testTheArrayKeysCannotBeUpdated()
     {
@@ -109,7 +109,7 @@ class CurrencyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symm\BitpayClient\Exceptions\ImmutableObjectException
+     * @expectedException \Symm\BitpayClient\Exception\ImmutableObjectException
      */
     public function testTheArrayKeysCannotBeUnset()
     {

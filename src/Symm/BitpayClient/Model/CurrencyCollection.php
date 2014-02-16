@@ -5,7 +5,7 @@ namespace Symm\BitpayClient\Model;
 use Guzzle\Service\Command\OperationCommand;
 use Guzzle\Service\Command\ResponseClassInterface;
 
-use Symm\BitpayClient\Exceptions\ImmutableObjectException;
+use Symm\BitpayClient\Exception\ImmutableObjectException;
 
 /**
  * CurrencyCollection
