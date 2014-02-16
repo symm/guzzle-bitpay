@@ -70,7 +70,7 @@ class BitpayClientTest extends GuzzleTestCase
     public function testCreateInvoiceReturnsInvoiceModel()
     {
         $client = $this->getClient();
-        $this->setMockResponse($client, 'invoice.json');
+        $this->setMockResponse($client, 'createInvoice');
 
         $invoice = $client->createInvoice(array(
             'price'    => 0.0001,
@@ -85,7 +85,7 @@ class BitpayClientTest extends GuzzleTestCase
     public function testGetInvoiceReturnsInvoiceModel()
     {
         $client = $this->getClient();
-        $this->setMockResponse($client, 'invoice.json');
+        $this->setMockResponse($client, 'createInvoice');
         $invoice = $client->getInvoice(array(
             'id' => 'XXXXXXXXXXXXXXXXXXXXXX'
         ));
@@ -96,7 +96,7 @@ class BitpayClientTest extends GuzzleTestCase
     public function getRatesReturnsCurrencyCollection()
     {
         $client = $this->getClient();
-        $this->setMockResponse($client, 'getRates.json');
+        $this->setMockResponse($client, 'getRates');
         $rates = $client->getRates();
 
         $this->assertInstanceOf('\Symm\BitpayClient\Model\CurrencyCollection', $rates);
