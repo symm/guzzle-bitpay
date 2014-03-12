@@ -60,6 +60,11 @@ class Invoice implements ResponseClassInterface
      */
     protected $currentTime;
 
+    /**
+     * @var string
+     */
+    protected $language = null;
+
     const STATUS_NEW       = 'new';
     const STATUS_PAID      = 'paid';
     const STATUS_CONFIRMED = 'confirmed';
@@ -84,13 +89,13 @@ class Invoice implements ResponseClassInterface
     /**
      * Constructor
      *
-     * @param string    $id
-     * @param string    $url
-     * @param string    $posData
-     * @param string    $status
-     * @param string    $btcPrice
-     * @param double    $price
-     * @param string    $currency
+     * @param string $id
+     * @param string $url
+     * @param string $posData
+     * @param string $status
+     * @param string $btcPrice
+     * @param double $price
+     * @param string $currency
      * @param \DateTime $invoiceTime
      * @param \DateTime $expirationTime
      * @param \DateTime $currentTime
@@ -259,6 +264,25 @@ class Invoice implements ResponseClassInterface
      */
     public function getUrl()
     {
+        if($this->language)
+            return $this->url . "&lang=" . $this->language;
+
         return $this->url;
+    }
+
+    /**
+     * @param string $language
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 }

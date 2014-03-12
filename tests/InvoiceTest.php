@@ -88,6 +88,16 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testInvoiceUrlWithLanguage()
+    {
+        $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+        $invoice->setLanguage("es");
+
+        $expectedUrl = "https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX&lang=es";
+
+        $this->assertEquals($expectedUrl, $invoice->getUrl());
+    }
+
     public function testInvoicePropertiesWithNoPosData()
     {
         unset($this->json['posData']);
