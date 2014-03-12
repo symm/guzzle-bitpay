@@ -77,7 +77,7 @@ foreach ($currencyCollection as $currency) {
 
 ### Localise Invoice page
 
-```
+``` php
 use Symm\BitpayClient\Localisation\Language;
 echo $invoice->getUrl(Language::SPANISH)
 ```
