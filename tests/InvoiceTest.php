@@ -2,6 +2,7 @@
 
 namespace Symm\BitpayClient\Tests;
 
+use Symm\BitpayClient\Localisation\Language;
 use Symm\BitpayClient\Model\Invoice;
 
 /**
@@ -98,5 +99,28 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testInvoiceHasAnArrayOfInvoiceStatuses()
     {
         $this->assertInternalType(\PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, Invoice::$allowedStatuses);
+    }
+
+    public function testInvoiceUrlWithLanguageParameters()
+    {
+        $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+        $this->assertEquals(
+            'https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX&lang=es',
+            $invoice->getUrl(Language::SPANISH)
+        );
+        $this->assertEquals(
+            'https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX&lang=fr_FR',
+            $invoice->getUrl(Language::FRENCH)
+        );
+    }
+
+    public function testInvoiceUrlWithInvalidLanguage()
+    {
+        $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+        $this->assertEquals(
+            'https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX',
+            $invoice->getUrl('foo')
+        );
+
     }
 }

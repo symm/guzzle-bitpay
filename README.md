@@ -17,7 +17,7 @@ Require the library in your [composer.json](https://getcomposer.org/) file:
 ``` json
 {
     "require": {
-        "symm/guzzle-bitpay": "1.0.x-dev"
+        "symm/guzzle-bitpay": "~1.0"
     }
 }
 ```
@@ -58,6 +58,13 @@ $invoice = $client->getInvoice(
 echo $invoice->getStatus() . PHP_EOL;
 ```
 
+### Verify BitPay Notification
+
+``` php
+$notificationString = file_get_contents("php://input");
+$invoice = $client->verifyNotification($notificationString);
+```
+
 ### Get exchange rates
 
 ``` php
@@ -66,6 +73,13 @@ foreach ($currencyCollection as $currency) {
     /** @var \Symm\BitpayClient\Model\Currency $currency */
     echo $currency->getCode() . ': ' . $currency->getRate();
 }
+```
+
+### Localise Invoice page
+
+```
+use Symm\BitpayClient\Localisation\Language;
+echo $invoice->getUrl(Language::SPANISH)
 ```
 
 ## Resources

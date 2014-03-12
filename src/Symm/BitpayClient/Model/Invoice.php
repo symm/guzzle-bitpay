@@ -5,6 +5,8 @@ namespace Symm\BitpayClient\Model;
 use Guzzle\Service\Command\OperationCommand;
 use Guzzle\Service\Command\ResponseClassInterface;
 
+use Symm\BitpayClient\Localisation\Language;
+
 /**
  * Invoice
  */
@@ -255,10 +257,16 @@ class Invoice implements ResponseClassInterface
     /**
      * Get the url of the Invoice
      *
+     * @param null $languageCode
+     *
      * @return string
      */
-    public function getUrl()
+    public function getUrl($languageCode = null)
     {
+        if ($languageCode && in_array($languageCode, Language::getAllowedLanguages())) {
+            return $this->url . '&lang=' . $languageCode;
+        }
+
         return $this->url;
     }
 }
