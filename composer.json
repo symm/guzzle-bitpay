@@ -17,7 +17,7 @@
         "phpunit/phpunit": "~3.7"
     },
     "autoload": {
-        "psr-0": { "Symm\\": "src/" }
+        "psr-0": { "Symm\\BitpayClient": "src/" }
     },
     "extra": {
         "branch-alias": {
