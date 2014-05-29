@@ -8,8 +8,6 @@ if (!file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'composer.lock')) {
         . "See https://github.com/composer/composer/blob/master/README.md for help with installing composer\n");
 }
 
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
 // Register an autoloader for the client being tested
 spl_autoload_register(function ($class) {
     if (0 === strpos($class, 'Symm\BitpayClient')) {
