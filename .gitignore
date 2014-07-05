@@ -1,4 +1,4 @@
-reference
-vendor
-play.php
+/vendor/
 phpunit.xml
+/bin/
+composer.lock

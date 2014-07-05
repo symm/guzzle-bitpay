@@ -14,7 +14,10 @@
         "psr/log" : "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~3.7"
+        "phpunit/phpunit": "~4.0"
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "autoload": {
         "psr-0": { "Symm\\BitpayClient": "src/" }
