@@ -24,15 +24,22 @@ Require the library in your [composer.json](https://getcomposer.org/) file:
 
 ## Usage
 
-### Create and configure a client
+### Create a client
 
 ``` php
 use Symm\BitpayClient\BitpayClient;
-$client = BitpayClient::factory(
-    array(
-        'apiKey' => 'YOUR_API_KEY_HERE',
-    )
-);
+
+$client = BitpayClient::createClient('YOUR_API_KEY_HERE');
+```
+
+### Create a Test Environment Client
+
+A client which communicates with the [Test Environment](http://blog.bitpay.com/2014/05/13/introducing-the-bitpay-test-environment.html)
+
+```php
+use Symm\BitpayClient\BitpayClient;
+
+$client = BitpayClient::createTestClient('YOUR_TEST_API_KEY_HERE');
 ```
 
 ### Create a new invoice
@@ -40,11 +47,12 @@ $client = BitpayClient::factory(
 ``` php
 $invoice = $client->createInvoice(
     array(
-        'price'    => 0.0001,
-        'currency' => 'BTC',
+        'price'    => 5,
+        'currency' => 'GBP',
     )
 );
-echo $invoice->getUrl() . PHP_EOL;
+
+print $invoice->getUrl() . PHP_EOL;
 ```
 
 ### Receive an existing invoice
@@ -52,17 +60,17 @@ echo $invoice->getUrl() . PHP_EOL;
 ``` php
 $invoice = $client->getInvoice(
     array(
-        'id' => 'XXXXXXXXXXXXXXXXXXXXXX'
+        'id' => 'YOUR_INVOICE_ID_HERE'
     )
 );
-echo $invoice->getStatus() . PHP_EOL;
+
+print $invoice->getStatus() . PHP_EOL;
 ```
 
 ### Verify BitPay Notification
 
 ``` php
-$notificationString = file_get_contents("php://input");
-$invoice = $client->verifyNotification($notificationString);
+$invoice = $client->verifyNotification(file_get_contents("php://input"));
 ```
 
 ### Get exchange rates
@@ -71,7 +79,7 @@ $invoice = $client->verifyNotification($notificationString);
 $currencyCollection = $client->getRates();
 foreach ($currencyCollection as $currency) {
     /** @var \Symm\BitpayClient\Model\Currency $currency */
-    echo $currency->getCode() . ': ' . $currency->getRate();
+    print $currency->getCode() . ': ' . $currency->getRate();
 }
 ```
 
@@ -79,7 +87,8 @@ foreach ($currencyCollection as $currency) {
 
 ``` php
 use Symm\BitpayClient\Localisation\Language;
-echo $invoice->getUrl(Language::SPANISH)
+
+print $invoice->getUrl(Language::SPANISH)
 ```
 
 ## Resources
@@ -90,6 +99,4 @@ echo $invoice->getUrl(Language::SPANISH)
 
 ## Copyright and license
 
-Code copyright Gareth Jones and released under [the MIT license](LICENSE).
-
-If you enjoy this library, please consider making a donation: [1CMaGyGXWsFbmQ8HmuzJ6qCe1NQ9ypcS2E](bitcoin:1CMaGyGXWsFbmQ8HmuzJ6qCe1NQ9ypcS2E?message=guzzle-bitpay-donation)
+Code copyright [Gareth Jones](https://github.com/symm) and released under [the MIT license](LICENSE).

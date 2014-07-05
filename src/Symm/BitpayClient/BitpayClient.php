@@ -32,7 +32,7 @@ class BitpayClient extends Client
     {
         parent::__construct($baseUrl, $config);
 
-        $this->setUserAgent('Guzzle BitpayClient - https://github.com/symm/guzzle-bitpay');
+        $this->setUserAgent('BitpayClient - https://github.com/symm/guzzle-bitpay');
     }
 
     /**
@@ -69,9 +69,40 @@ class BitpayClient extends Client
     }
 
     /**
-     * Call from your notification handler to convert $_POST data to an array containing invoice data
+     * Factory method for creating a new BitpayClient
      *
-     * @param string $jsonString The raw POST json string obtained using file_get_contents("php://input");
+     * @param $apiKey
+     *
+     * @return BitpayClient
+     */
+    public static function createClient($apiKey)
+    {
+        return self::factory(array(
+            'apiKey'   => $apiKey,
+            'base_url' => 'https://bitpay.com/api'
+        ));
+    }
+
+    /**
+     * Factory method for creating a new BitpayClient using the test environment
+     * http://blog.bitpay.com/2014/05/13/introducing-the-bitpay-test-environment.html
+     *
+     * @param $apiKey
+     *
+     * @return BitpayClient
+     */
+    public static function createTestClient($apiKey)
+    {
+        return self::factory(array(
+            'apiKey'   => $apiKey,
+            'base_url' => 'https://test.bitpay.com/api'
+        ));
+    }
+
+    /**
+     * Call from your notification handler to convert raw post data to an array containing invoice data
+     *
+     * @param string $jsonString The raw POST data from file_get_contents("php://input");
      *
      * @return Invoice
      *
@@ -113,7 +144,7 @@ class BitpayClient extends Client
      *
      * @return string
      */
-    protected function generateHash($data)
+    private function generateHash($data)
     {
         $key = $this->getConfig('apiKey');
         $hmac = base64_encode(hash_hmac('sha256', $data, $key, true));

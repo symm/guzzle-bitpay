@@ -8,32 +8,40 @@ use Symm\BitpayClient\BitpayClient;
 
 class BitpayClientTest extends GuzzleTestCase
 {
-    protected $config = array(
-        'apiKey' => 'TESTAPIKEY'
-    );
+    private $apiKey = 'TESTAPIKEY';
 
-    protected function getClient()
+    private function getClient()
     {
-        $client = BitpayClient::factory($this->config);
+        $client = BitpayClient::createClient($this->apiKey);
 
         return $client;
     }
 
-    public function testBuilderCreatesClient()
+    public function testFactoryMethodReturnsAClient()
     {
-        $client = $this->getClient();
+        $client = BitpayClient::factory(
+            array(
+                'apiKey' => $this->apiKey
+            )
+        );
+        $this->assertInstanceOf('\Symm\BitpayClient\BitpayClient', $client);
+    }
+
+    public function testCreateTestClientMethodReturnsAClient()
+    {
+        $client = BitpayClient::createTestClient($this->apiKey);
         $this->assertInstanceOf('\Symm\BitpayClient\BitpayClient', $client);
     }
 
     /**
      * @expectedException \Guzzle\Common\Exception\InvalidArgumentException
      */
-    public function testClientRequiresApiKey()
+    public function testApiKeyIsARequiredArguement()
     {
-        $client = BitpayClient::factory(array());
+        BitpayClient::factory(array());
     }
 
-    public function testClientConfiguresBaseUrl()
+    public function testClientUsesTheLiveHost()
     {
         $client  = $this->getClient();
         $baseUrl = $client->getConfig('base_url');
@@ -41,17 +49,25 @@ class BitpayClientTest extends GuzzleTestCase
         $this->assertEquals('https://bitpay.com/api', $baseUrl);
     }
 
-    public function testClientConfiguresBasicAuthWithTheApiKey()
+    public function testTestClientUsesTheTestHost()
+    {
+        $client  = BitpayClient::createTestClient($this->apiKey);
+        $baseUrl = $client->getConfig('base_url');
+
+        $this->assertEquals('https://test.bitpay.com/api', $baseUrl);
+    }
+
+    public function testClientUsesBasicAuthenticationWithTheApiKeyAsTheUsernameAndABlankPassword()
     {
         $client         = $this->getClient();
         $requestOptions = $client->getConfig('request.options');
 
-        $this->assertEquals($this->config['apiKey'], $requestOptions['auth'][0]);
+        $this->assertEquals($this->apiKey, $requestOptions['auth'][0]);
         $this->assertEquals("", $requestOptions['auth'][1]);
         $this->assertEquals("Basic", $requestOptions['auth'][2]);
     }
 
-    public function testClientSetsTheUserAgent()
+    public function testClientHasBitPayClientInTheUserAgent()
     {
         $client    = $this->getClient();
         $userAgent = $client->getCommand(
@@ -64,10 +80,10 @@ class BitpayClientTest extends GuzzleTestCase
             ->getHeader('User-Agent')
             ->__toString();
 
-        $this->assertEquals('Guzzle BitpayClient - https://github.com/symm/guzzle-bitpay', $userAgent);
+        $this->assertEquals('BitpayClient - https://github.com/symm/guzzle-bitpay', $userAgent);
     }
 
-    public function testCreateInvoiceReturnsInvoiceModel()
+    public function testCreateInvoiceShouldReturnAnInvoiceModel()
     {
         $client = $this->getClient();
         $this->setMockResponse($client, 'createInvoice');
@@ -82,7 +98,7 @@ class BitpayClientTest extends GuzzleTestCase
         $this->assertInstanceOf('\Symm\BitpayClient\Model\Invoice', $invoice);
     }
 
-    public function testGetInvoiceReturnsInvoiceModel()
+    public function testGetInvoiceShouldReturnAnInvoiceModel()
     {
         $client = $this->getClient();
         $this->setMockResponse($client, 'createInvoice');
@@ -93,7 +109,7 @@ class BitpayClientTest extends GuzzleTestCase
         $this->assertInstanceOf('\Symm\BitpayClient\Model\Invoice', $invoice);
     }
 
-    public function getRatesReturnsCurrencyCollection()
+    public function getRatesShouldReturnACurrencyCollection()
     {
         $client = $this->getClient();
         $this->setMockResponse($client, 'getRates');
@@ -105,7 +121,7 @@ class BitpayClientTest extends GuzzleTestCase
     /**
      * @expectedException \Symm\BitpayClient\Exception\CallbackJsonMissingException
      */
-    public function testCallbackMissingJson()
+    public function testExceptionShouldBeThrownIfTheCallbackNotifcationIsBlank()
     {
         $client = $this->getClient();
 
@@ -115,7 +131,7 @@ class BitpayClientTest extends GuzzleTestCase
     /**
      * @expectedException \Symm\BitpayClient\Exception\CallbackInvalidJsonException
      */
-    public function testCallbackInvalidJson()
+    public function testExceptionShouldBeThrownIfTheCallbackNotificationIsNotValidJson()
     {
         $client = $this->getClient();
 
@@ -125,7 +141,7 @@ class BitpayClientTest extends GuzzleTestCase
     /**
      * @expectedException \Symm\BitpayClient\Exception\CallbackPosDataMissingException
      */
-    public function testCallbackPosDataMissing()
+    public function testExceptionShouldBeThrownIfTheCallbackNotificationIsMissingThePosData()
     {
         $client   = $this->getClient();
         $response = json_encode(
@@ -141,7 +157,7 @@ class BitpayClientTest extends GuzzleTestCase
     /**
      * @expectedException \Symm\BitpayClient\Exception\CallbackBadHashException
      */
-    public function testCallbackBadHash()
+    public function testExceptionShouldBeThrownIfTheCallbackNotificationHasAnInvalidHash()
     {
         $client = $this->getClient();
 
@@ -154,7 +170,7 @@ class BitpayClientTest extends GuzzleTestCase
         $client->verifyNotification($response);
     }
 
-    public function testVerifyValidNotification()
+    public function testTheVerifyNotificationMethodShouldReturnAHydratedInvoiceModelIfValidResponse()
     {
         $client = $this->getClient();
 
