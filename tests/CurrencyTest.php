@@ -27,24 +27,28 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     public function testItCanBeInstantiated()
     {
         $currency = $this->getCurrencyObject();
+
         $this->assertInstanceOf('Symm\BitpayClient\Model\Currency', $currency);
     }
 
     public function testItReturnsACurrencyCode()
     {
         $currency = $this->getCurrencyObject();
+
         $this->assertEquals($this->currency['code'], $currency->getCode());
     }
 
     public function testItReturnsAItsName()
     {
         $currency = $this->getCurrencyObject();
+
         $this->assertEquals($this->currency['name'], $currency->getName());
     }
 
     public function testItReturnsTheRate()
     {
         $currency = $this->getCurrencyObject();
+
         $this->assertEquals($this->currency['rate'], $currency->getRate());
     }
 }

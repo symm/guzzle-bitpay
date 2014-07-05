@@ -48,12 +48,14 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testInvoiceCanBeInstantiated()
     {
         $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+
         $this->assertInstanceOf('\Symm\BitpayClient\Model\Invoice', $invoice);
     }
 
     public function testInvoiceImplementsResponseClassInterface()
     {
         $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+
         $this->assertInstanceOf('\Guzzle\Service\Command\ResponseClassInterface', $invoice);
     }
 
@@ -91,6 +93,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->json['posData']);
         $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+
         $this->assertEquals(null, $invoice->getPosData());
     }
 
@@ -102,6 +105,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testInvoiceUrlWithLanguageParameters()
     {
         $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+
         $this->assertEquals(
             'https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX&lang=es',
             $invoice->getUrl(Language::SPANISH)
@@ -115,10 +119,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testInvoiceUrlWithInvalidLanguage()
     {
         $invoice = Invoice::fromCommand($this->getMockOperationCommand());
+
         $this->assertEquals(
             'https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX',
             $invoice->getUrl('foo')
         );
-
     }
 }

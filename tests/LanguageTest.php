@@ -9,13 +9,12 @@ use Symm\BitpayClient\Localisation\Language;
  */
 class LanguageTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function test_it_returns_an_array_of_language_choices()
+    public function testItReturnsAnArrayOfLanguageChoices()
     {
         $this->assertInternalType('array', Language::getLanguageChoices());
     }
 
-    public function test_it_returns_an_array_of_allowed_languages()
+    public function testItReturnsAnArrayOfAllowedLanguages()
     {
         $this->assertInternalType('array', Language::getAllowedLanguages());
     }

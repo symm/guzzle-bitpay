@@ -52,18 +52,21 @@ class CurrencyCollectionTest extends \PHPUnit_Framework_TestCase
     public function testItCanBeInstantiated()
     {
         $currencyCollection = CurrencyCollection::fromCommand($this->getMockOperationCommand());
+
         $this->assertInstanceOf('Symm\BitpayClient\Model\CurrencyCollection', $currencyCollection);
     }
 
     public function testItImplementsResponseClassInterface()
     {
         $currencyCollection = CurrencyCollection::fromCommand($this->getMockOperationCommand());
+
         $this->assertInstanceOf('\Guzzle\Service\Command\ResponseClassInterface', $currencyCollection);
     }
 
     public function testItIsIterable()
     {
         $currencyCollection = CurrencyCollection::fromCommand($this->getMockOperationCommand());
+
         foreach ($currencyCollection as $currency) {
             $this->assertInstanceOf('Symm\BitpayClient\Model\Currency', $currency);
         }
@@ -90,12 +93,14 @@ class CurrencyCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $index = 1;
         $currencyCollection = CurrencyCollection::fromCommand($this->getMockOperationCommand());
+
         $this->assertEquals($this->currencies[$index]['code'], $currencyCollection[$index]->getCode());
     }
 
     public function testItReturnsFalseForAnEmptyArrayKey()
     {
         $currencyCollection = CurrencyCollection::fromCommand($this->getMockOperationCommand());
+
         $this->assertEquals(false, $currencyCollection[3]);
     }
 

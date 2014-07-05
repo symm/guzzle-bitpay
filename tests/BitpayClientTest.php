@@ -24,12 +24,14 @@ class BitpayClientTest extends GuzzleTestCase
                 'apiKey' => $this->apiKey
             )
         );
+
         $this->assertInstanceOf('\Symm\BitpayClient\BitpayClient', $client);
     }
 
     public function testCreateTestClientMethodReturnsAClient()
     {
         $client = BitpayClient::createTestClient($this->apiKey);
+
         $this->assertInstanceOf('\Symm\BitpayClient\BitpayClient', $client);
     }
 
@@ -188,6 +190,7 @@ class BitpayClientTest extends GuzzleTestCase
         );
 
         $invoice = $client->verifyNotification(json_encode($invoice));
+
         $this->assertInstanceOf('\Symm\BitpayClient\Model\Invoice', $invoice);
     }
 }
