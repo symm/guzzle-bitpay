@@ -9,8 +9,7 @@ use Symm\BitpayClient\Model\Currency;
  */
 class CurrencyTest extends \PHPUnit_Framework_TestCase
 {
-
-    protected $currency = array(
+    private $currency = array(
         'code' => 'SEK',
         'name' => 'Swedish Krona',
         'rate' => 4169.1658

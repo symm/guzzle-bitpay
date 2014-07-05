@@ -15,52 +15,52 @@ class Invoice implements ResponseClassInterface
     /**
      * @var string
      */
-    protected $id;
+    private $id;
 
     /**
      * @var  string
      */
-    protected $url;
+    private $url;
 
     /**
      * @var string
      */
-    protected $posData;
+    private $posData;
 
     /**
      * @var string
      */
-    protected $status;
+    private $status;
 
     /**
      * @var string
      */
-    protected $btcPrice;
+    private $btcPrice;
 
     /**
      * @var double
      */
-    protected $price;
+    private $price;
 
     /**
      * @var string
      */
-    protected $currency;
+    private $currency;
 
     /**
      * @var \DateTime
      */
-    protected $invoiceTime;
+    private $invoiceTime;
 
     /**
      * @var \DateTime
      */
-    protected $expirationTime;
+    private $expirationTime;
 
     /**
      * @var \DateTime
      */
-    protected $currentTime;
+    private $currentTime;
 
     const STATUS_NEW       = 'new';
     const STATUS_PAID      = 'paid';
@@ -133,6 +133,7 @@ class Invoice implements ResponseClassInterface
     {
         $response = $command->getResponse();
         $json     = $response->json();
+
         return self::fromArray($json);
     }
 

@@ -10,17 +10,17 @@ class Currency
     /**
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * @var double
      */
-    protected $rate;
+    private $rate;
 
     /**
      * Constructor
@@ -37,7 +37,7 @@ class Currency
     }
 
     /**
-     * Get the three letter code of the Currency
+     * Get the ISO 4217 code of the Currency
      *
      * @return string
      */

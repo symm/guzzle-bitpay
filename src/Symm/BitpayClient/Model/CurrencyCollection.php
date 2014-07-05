@@ -15,12 +15,12 @@ class CurrencyCollection implements ResponseClassInterface, \ArrayAccess, \Itera
     /**
      * @var array
      */
-    protected $currencies;
+    private $currencies;
 
     /**
      * @var integer
      */
-    protected $position;
+    private $position;
 
     /**
      * Constructor

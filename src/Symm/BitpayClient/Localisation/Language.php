@@ -46,7 +46,7 @@ class Language
     const CHINESE             = 'zh_CN';
     const TRADITIONAL_CHINESE = 'zh_TW';
 
-    protected static $allowedLanguages = array(
+    private static $allowedLanguages = array(
         self::ARABIC,
         self::BULGARIAN,
         self::CATALAN,
@@ -87,7 +87,7 @@ class Language
         self::TRADITIONAL_CHINESE
     );
 
-    protected static $languageChoices = array(
+    private static $languageChoices = array(
         self::ARABIC              => 'العربية',
         self::BULGARIAN           => 'Български',
         self::CATALAN             => 'Català',

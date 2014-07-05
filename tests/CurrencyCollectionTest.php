@@ -9,7 +9,7 @@ use Symm\BitpayClient\Model\CurrencyCollection;
  */
 class CurrencyCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    protected $currencies = array(
+    private $currencies = array(
         array(
             "code" => "USD",
             "name" => "US Dollar",
@@ -27,7 +27,7 @@ class CurrencyCollectionTest extends \PHPUnit_Framework_TestCase
         )
     );
 
-    protected function getMockResponse()
+    private function getMockResponse()
     {
         $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
             ->disableOriginalConstructor()->getMock();
@@ -38,7 +38,7 @@ class CurrencyCollectionTest extends \PHPUnit_Framework_TestCase
         return $response;
     }
 
-    protected function getMockOperationCommand()
+    private function getMockOperationCommand()
     {
         $response = $this->getMockResponse();
         $command  = $this->getMock('Guzzle\Service\Command\OperationCommand');

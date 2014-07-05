@@ -10,9 +10,7 @@ use Symm\BitpayClient\Model\Invoice;
  */
 class InvoiceTest extends \PHPUnit_Framework_TestCase
 {
-    protected $params = array();
-
-    protected $json = array(
+    private $json = array(
         "id"             => "XXXXXXXXXXXXXXXXXXXXXX",
         "url"            => "https://bitpay.com/invoice?id=XXXXXXXXXXXXXXXXXXXXXX",
         "posData"        => "Test Pos data",
@@ -25,7 +23,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         "currentTime"    => 1392457276187
     );
 
-    protected function getMockResponse()
+    private function getMockResponse()
     {
         $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
             ->disableOriginalConstructor()->getMock();
@@ -36,7 +34,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         return $response;
     }
 
-    protected function getMockOperationCommand()
+    private function getMockOperationCommand()
     {
         $response = $this->getMockResponse();
         $command  = $this->getMock('Guzzle\Service\Command\OperationCommand');
