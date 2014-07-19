@@ -3,6 +3,7 @@
 namespace Symm\BitpayClient;
 
 use Guzzle\Common\Collection;
+
 use Guzzle\Service\Client;
 use Guzzle\Service\Description\ServiceDescription;
 
@@ -10,18 +11,18 @@ use Symm\BitpayClient\Exception\CallbackBadHashException;
 use Symm\BitpayClient\Exception\CallbackPosDataMissingException;
 use Symm\BitpayClient\Exception\CallbackJsonMissingException;
 use Symm\BitpayClient\Exception\CallbackInvalidJsonException;
+use Symm\BitpayClient\Exception\PosDataLengthException;
+
 use Symm\BitpayClient\Model\Invoice;
 use Symm\BitpayClient\Model\CurrencyCollection;
 
 /**
  * BitpayClient
- *
- * @method Invoice createInvoice() createInvoice($parameters) Create an Invoice
- * @method Invoice getInvoice() getInvoice($parameters) Get an Invoice
- * @method CurrencyCollection getRates() getRates()
  */
 class BitpayClient extends Client
 {
+    const POS_DATA_MAX_LENGTH = 100;
+
     /**
      * Create a new BitpayClient
      *
@@ -100,6 +101,46 @@ class BitpayClient extends Client
     }
 
     /**
+     * Create a new BitPay invoice
+     *
+     * @param $parameters
+     *
+     * @return Invoice
+     *
+     * @throws PosDataLengthException
+     */
+    public function createInvoice($parameters)
+    {
+        if (array_key_exists('posData', $parameters)) {
+            $parameters = $this->hashPosData($parameters);
+        }
+
+        return $this->getCommand('createInvoice', $parameters)->getResult();
+    }
+
+    /**
+     * Get an existing invoice
+     *
+     * @param array $parameters
+     *
+     * @return Invoice
+     */
+    public function getInvoice($parameters)
+    {
+        return $this->getCommand('getInvoice', $parameters)->getResult();
+    }
+
+    /**
+     * Get Bitcoin Best Bid (BBB) Rates
+     *
+     * @return CurrencyCollection
+     */
+    public function getRates()
+    {
+        return $this->getCommand('getRates', array())->getResult();
+    }
+
+    /**
      * Call from your notification handler to convert raw post data to an array containing invoice data
      *
      * @param string $jsonString The raw POST data from file_get_contents("php://input");
@@ -150,5 +191,29 @@ class BitpayClient extends Client
         $hmac = base64_encode(hash_hmac('sha256', $data, $key, true));
 
         return strtr($hmac, array('+' => '-', '/' => '_', '=' => ''));
+    }
+
+    /**
+     * Hash the posData
+     *
+     * @param array $parameters
+     *
+     * @return mixed
+     * @throws Exception\PosDataLengthException
+     */
+    private function hashPosData($parameters)
+    {
+        $hashedPosData         = array('posData' => $parameters['posData']);
+        $hashedPosData['hash'] = $this->generateHash(serialize($parameters['posData']));
+
+        $parameters['posData'] = json_encode($hashedPosData);
+
+        if (strlen($parameters['posData']) > self::POS_DATA_MAX_LENGTH) {
+            throw new PosDataLengthException(
+                'posData cannot exceed '. self::POS_DATA_MAX_LENGTH . ' characters (including hash)'
+            );
+        }
+
+        return $parameters;
     }
 }

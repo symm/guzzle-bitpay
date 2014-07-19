@@ -35,11 +35,9 @@ class BitpayClientTest extends GuzzleTestCase
         $this->assertInstanceOf('\Symm\BitpayClient\BitpayClient', $client);
     }
 
-    /**
-     * @expectedException \Guzzle\Common\Exception\InvalidArgumentException
-     */
     public function testApiKeyIsARequiredArguement()
     {
+        $this->setExpectedException('\Guzzle\Common\Exception\InvalidArgumentException');
         BitpayClient::factory(array());
     }
 
@@ -111,7 +109,7 @@ class BitpayClientTest extends GuzzleTestCase
         $this->assertInstanceOf('\Symm\BitpayClient\Model\Invoice', $invoice);
     }
 
-    public function getRatesShouldReturnACurrencyCollection()
+    public function testgetRatesShouldReturnACurrencyCollection()
     {
         $client = $this->getClient();
         $this->setMockResponse($client, 'getRates');
@@ -120,31 +118,26 @@ class BitpayClientTest extends GuzzleTestCase
         $this->assertInstanceOf('\Symm\BitpayClient\Model\CurrencyCollection', $rates);
     }
 
-    /**
-     * @expectedException \Symm\BitpayClient\Exception\CallbackJsonMissingException
-     */
     public function testExceptionShouldBeThrownIfTheCallbackNotifcationIsBlank()
     {
-        $client = $this->getClient();
+        $this->setExpectedException('\Symm\BitpayClient\Exception\CallbackJsonMissingException');
 
+        $client = $this->getClient();
         $client->verifyNotification('');
     }
 
-    /**
-     * @expectedException \Symm\BitpayClient\Exception\CallbackInvalidJsonException
-     */
     public function testExceptionShouldBeThrownIfTheCallbackNotificationIsNotValidJson()
     {
-        $client = $this->getClient();
+        $this->setExpectedException('\Symm\BitpayClient\Exception\CallbackInvalidJsonException');
 
+        $client = $this->getClient();
         $client->verifyNotification("23kwreGSFDG£%");
     }
 
-    /**
-     * @expectedException \Symm\BitpayClient\Exception\CallbackPosDataMissingException
-     */
     public function testExceptionShouldBeThrownIfTheCallbackNotificationIsMissingThePosData()
     {
+        $this->setExpectedException('\Symm\BitpayClient\Exception\CallbackPosDataMissingException');
+
         $client   = $this->getClient();
         $response = json_encode(
             array(
@@ -156,11 +149,10 @@ class BitpayClientTest extends GuzzleTestCase
         var_dump($response);
     }
 
-    /**
-     * @expectedException \Symm\BitpayClient\Exception\CallbackBadHashException
-     */
     public function testExceptionShouldBeThrownIfTheCallbackNotificationHasAnInvalidHash()
     {
+        $this->setExpectedException('\Symm\BitpayClient\Exception\CallbackBadHashException');
+
         $client = $this->getClient();
 
         $response = json_encode(
@@ -170,6 +162,43 @@ class BitpayClientTest extends GuzzleTestCase
         );
 
         $client->verifyNotification($response);
+    }
+
+    public function testTheClientShouldAutomaticallyHashThePosDataWhenCreatingAnInvoice()
+    {
+        $client = $this->getClient();
+        $mock = $this->setMockResponse($client, 'createInvoice');
+
+        $client->createInvoice(array(
+            'price'    => 0.0001,
+            'currency' => 'BTC',
+            'posData'  => '{"invoiceNo" : "12345"}',
+            'itemDesc' => 'Test transaction'
+        ));
+
+        /** @var \Guzzle\Http\Message\EntityEnclosingRequest $request */
+        $request = $mock->getReceivedRequests()[0];
+        $posData = $request->getPostFields()->get('posData');
+
+        $this->assertEquals(
+            '{"posData":"{\"invoiceNo\" : \"12345\"}","hash":"3hdrr7DrAv4icywWZYeDDrnVM0_Jsd5TlnjwLOEhKOs"}',
+            $posData
+        );
+    }
+
+    public function testTheClientShouldThrowAnExceptionIfThePosDataIsTooLong()
+    {
+        $this->setExpectedException('\Symm\BitPayClient\Exception\PosDataLengthException');
+
+        $client = $this->getClient();
+        $this->setMockResponse($client, 'createInvoice');
+
+        $client->createInvoice(array(
+            'price'    => 0.0001,
+            'currency' => 'BTC',
+            'posData'  => str_repeat('X', 34),
+            'itemDesc' => 'Test transaction'
+        ));
     }
 
     public function testTheVerifyNotificationMethodShouldReturnAHydratedInvoiceModelIfValidResponse()
